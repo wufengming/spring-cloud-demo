@@ -1,0 +1,38 @@
+
+server:
+  # 服务端口号
+  port: 8088
+spring:
+  application:
+    # 服务名称 - 服务之间使用名称进行通讯
+    name: service-config
+  cloud:
+    config:
+      server:
+        git:
+          # 配置存储地址(git)
+          uri: https://gitee.com/wufengming/spring-cloud-config.git
+          # 存储文件夹
+          search-paths: myconfig
+      # git主分支
+      label: master
+eureka:
+  client:
+    service-url:
+      # 填写注册中心服务器地址
+      defaultZone: http://localhost:8081/eureka
+    # 是否需要将自己注册到注册中心
+    register-with-eureka: true
+    # 是否需要搜索服务信息
+    fetch-registry: true
+  instance:
+    # 使用ip地址注册到注册中心
+    prefer-ip-address: true
+    # 注册中心列表中显示的状态参数
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+# actuator 安全认证
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

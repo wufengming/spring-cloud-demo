@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wfm.servicesystem.mapper.OrganizeMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        creator,
+        editor,
+        cur_orgid,
+        insert_dt,
+        update_dt,
+        record_ver,
+        parent_id, parent_code, types, encode, order_code, name, area_code, area_name, enterprise_code, enterprise_attachment, levels, unit_nature, trade_type, manager, mobilephone, fax, email, address, formation_num, job_num, retire_num, temproary_num, service_startdate, service_enddate, empower_info, sort_order, verify_state, verify_date, verify_opinion, enabledmark, del_flag, description
+    </sql>
+    <select id="getSysOrganizeById" resultType="com.wfm.servicesystem.model.vo.organize.OrganizeQueryVo">
+      select
+      <include refid="Base_Column_List"/>
+      from s_organize where id = #{id}
+    </select>
+    <select id="getSysOrganizePageList" resultType="com.wfm.servicesystem.model.vo.organize.OrganizeQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from s_organize
+        where del_flag = 0
+    </select>
+
+
+    <resultMap id="treeResultMap" type="com.wfm.servicesystem.model.vo.organize.OrganizeTreeVo">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId"/>
+        <result column="encode" property="encode"/>
+        <result column="name" property="name"/>
+        <result column="enabledmark" property="enabledmark"/>
+        <result column="sort_order" property="sortOrder"/>
+        <result column="description" property="description"/>
+        <result column="record_ver" property="recordVer"/>
+
+        <!--collection标签的属性可以去百度一下-->
+        <!--
+            property:对应实体类中的List字段
+            ofType:子查询的输出类型 ofType="com.wfm.servicesystem.model.vo.organize.OrganizeTreeVo"
+            select:标记子查询，对应子查询的id，注意只有select属性还不行，Mapper接口中还必须要声明
+            column:有承上启下的作用，接收“父查询”对应字段的查询结果，向“子级查询”传递此结果
+            JavaType:一般为java.util.ArrayList
+        -->
+        <collection property="children"
+                    select="getOrganizeTreeList"
+                    ofType="com.wfm.servicesystem.model.vo.organize.OrganizeTreeVo"
+                    column="id"
+                    javaType="java.util.ArrayList"/>
+    </resultMap>
+
+    <!--collection标签中的子查询,同样的select标签中的id也要在Mapper接口中声明-->
+    <select id="getOrganizeTreeList" resultMap="treeResultMap">
+      select * from s_organize where parent_id=#{id}
+    </select>
+</mapper>

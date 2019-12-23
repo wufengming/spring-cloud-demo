@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wfm.servicesystem.mapper.UserOrgMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        creator,
+        editor,
+        cur_orgid,
+        insert_dt,
+        update_dt,
+        record_ver,
+        user_id, user_account, orgid, orgcode, enabledmark, role_phid, role_code, del_flag, description
+    </sql>
+
+</mapper>

@@ -1,0 +1,217 @@
+
+# demo-system Common Config
+
+############################# 访问路径、端口tomcat start #############################
+server:
+  port: 8099
+  servlet:
+    context-path: /
+  tomcat:
+    max-threads: 1000
+    min-spare-threads: 30
+    uri-encoding: UTF-8
+############################# 访问路径、端口tomcat end ###############################
+
+
+################################ spring config start ###############################
+spring:
+  application:
+    name: demo-system
+  profiles:
+    active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 3000
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300ms
+        max-idle: 16
+        min-idle: 8
+  jackson:
+    date-format: yyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 数据源
+  datasource:
+    url: jdbc:mysql://localhost:3306/wfm?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    # url: jdbc:p6spy:mysql://localhost:3306/wfm?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    # driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    logSlowSql: true
+    # Druid StatViewServlet配置
+    druid:
+      stat-view-servlet:
+        # 默认true 内置监控页面首页/druid/index.html
+        enabled: true
+        url-pattern: /druid/*
+        # 允许清空统计数据
+        reset-enable: true
+        login-username: root
+        login-password: 123456
+        # IP白名单 多个逗号分隔
+        allow:
+        # IP黑名单
+        deny:
+      filter:
+        stat:
+          # 显示慢sql 默认当超过3秒显示
+          log-slow-sql: true
+  flyway:
+    classpath: /db/migration
+    enabled: false
+    baseline-on-migrate: true
+  freemarker:
+    template-loader-path: classpath:/templates/
+################################ spring config end #################################
+
+
+############################## demo-system start ##############################
+demo-system:
+  # 是否启用ansi控制台输出有颜色的字体
+  enable-ansi: true
+  # 是否启用验证码
+  enable-verify-code: false
+  # 过滤器配置
+  filter:
+    # 请求路径Filter配置
+    request-path:
+      enabled: true
+      include-paths: /**
+      # 排除路径，多行字符串配置
+      exclude-paths: |
+        /applications/**,/actuator/**,/instances/**,/logfile,/sba-settings.js,/assets/img/favicon.png,
+        /swagger-ui.html,/swagger-resources/**,/webjars/springfox-swagger-ui/**,/v2/api-docs,
+        /druid/**,/favicon.ico
+  # 拦截器配置
+  interceptor:
+    permission:
+      enabled: false
+      include-paths: /**
+      exclude-paths: /swagger-resources/**,/api-docs/**,/v2/api-docs/**,/adminLogin,/sysLogin,/login.html,/verificationCode,/doc/**,/error/**,/docs,/resource/**
+    resource:
+      enabled: true
+      include-paths: ${demo-system.resource-access-patterns}
+    upload:
+      enabled: true
+      include-paths: /upload/**
+    download:
+      enabled: true
+      include-paths: /download/**
+
+  # AOP配置
+  aop:
+    log:
+      # 是否启用
+      enabled: true
+      # 1.请求和响应分开，按照执行顺序打印
+      # 2.ThreadLocal线程绑定，方法执行结束时，连续打印请求和响应日志
+      # 3.ThreadLocal线程绑定，方法执行结束时，同时打印请求和响应日志
+      print-type: 1
+      # 请求日志在控制台是否格式化输出，local环境建议开启，服务器环境设置为false
+      request-log-format: true
+      # 响应日志在控制台是否格式化输出，local环境建议开启，服务器环境设置为false
+      response-log-format: true
+
+  # 文件上传下载配置
+  # 静态资源实际存储路径
+  upload-path: /Users/MacBook-Pro/workspace/upload/
+  # 静态资源对外暴露的访问路径
+  resource-access-path: resource/
+  # 资源访问路径匹配：/resource/**
+  resource-access-patterns: ${demo-system.resource-access-path}**
+  # 资源访问全路径前缀：http://localhost:8888/resource/
+  resource-access-url: http://localhost:${server.port}${server.servlet.context-path}${demo-system.resource-access-path}
+  # 全局允许上传的类型
+  allow-upload-file-extensions: jpg,png,docx,xlsx,pptx,pdf
+  allow-download-file-extensions: jpg,png,docx,xlsx,pptx,pdf
+
+  # CORS跨域配置，默认允许跨域
+  cors:
+    # 是否启用跨域，默认启用
+    enable: true
+    # CORS过滤的路径，默认：/**
+    path: /**
+    # 允许访问的源
+    allowed-origins: '*'
+    # 允许访问的请求头
+    allowed-headers: x-requested-with,content-type,token
+    # 是否允许发送cookie
+    allow-credentials: true
+    # 允许访问的请求方式
+    allowed-methods: OPTION,GET,POST
+    # 允许响应的头
+    exposed-headers: token
+    # 该响应的有效时间默认为30分钟，在有效时间内，浏览器无须为同一请求再次发起预检请求
+    max-age: 1800
+  # 静态资源访问配置
+  resource-handlers: classpath:/static/,classpath:/templates/,classpath:/META-INF/resources/,classpath:/resources/,classpath:/public/
+
+  jwt:
+    # token请求头名称
+    token-name: Access-Token
+    # jwt密钥
+    secret: 123456
+    # 发行人
+    issuer: spring-boot
+    # 观众
+    audience: web
+    # 默认过期时间1小时，单位：秒
+    expire-second: 3600
+    # 是否刷新token
+    refresh-token: true
+    # 刷新token的时间间隔，默认10分钟，单位：秒
+    refresh-token-countdown: 600
+    # redis校验jwt token是否存在,可选
+    redis-check: true
+    # true: 同一个账号只能是最后一次登陆token有效，false：同一个账号可多次登陆
+    single-login: true
+############################### demo-system end ###############################
+
+
+############################### mybatis-plus start #################################
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.wfm.servicesystem.entity #实体扫描，多个package用逗号或者分号分隔
+  # 启动时是否检查MyBatis XML文件是否存在
+  check-config-location: true
+  # MyBatis原生配置
+  configuration:
+    # 字段名称下划线转驼峰命名
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"未设置主键类型",2:"用户输入ID (该类型可以通过自己注册自动填充插件进行填充)", 3:"全局唯一ID (idWorker), 4:全局唯一ID (UUID), 5:字符串全局唯一ID (idWorker 的字符串表示)";
+      id-type: ID_WORKER
+      # 逻辑已删除值(默认为 1)
+      logic-delete-value: 1
+      # 逻辑未删除值(默认为 0)
+      logic-not-delete-value: 0
+  # mapper xml映射路径
+################################ mybatis-plus end ##################################
+
+
+#################################### Swagger配置 start #################################
+swagger:
+  enable: true
+  url: http://127.0.0.1:${server.port}${server.servlet.context-path}swagger-ui.html
+  title: demo-system API接口文档
+  description: system Api Documentation
+  version: 1.0.0
+  termsOfServiceUrl: ''
+  base:
+    package: com.wfm.servicesystem
+  contact:
+    name: wfm
+    url: ''
+    email: 542171065@qq.com
+#################################### Swagger配置 end ###################################

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wfm.servicesystem.mapper.MenuButtonMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        creator,
+        editor,
+        cur_orgid,
+        insert_dt,
+        update_dt,
+        record_ver,
+        parent_id, menu_id, levels, encode, name, icon, location, jsevent, path, ispublic, allowedit, allowdelete, sort_order, enabledmark, del_flag, description
+    </sql>
+
+    <select id="getMenuButtonById" resultType="com.wfm.servicesystem.model.vo.menubutton.MenuButtonQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from s_menu_button where id = #{id}
+    </select>
+
+    <select id="getMenuButtonPageList" resultType="com.wfm.servicesystem.model.vo.menubutton.MenuButtonQueryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from s_menu_button
+    </select>
+</mapper>

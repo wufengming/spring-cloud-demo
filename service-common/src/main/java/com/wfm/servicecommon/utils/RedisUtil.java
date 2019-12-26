@@ -1,13 +1,14 @@
 package com.wfm.servicecommon.utils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.springframework.util.CollectionUtils;
  * @Author Scott
  *
  */
+@Slf4j
 @Component
 public class RedisUtil {
 
@@ -26,6 +28,31 @@ public class RedisUtil {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
+
+
+	// ============================check=============================
+
+	/**
+	 * 检查redis是否存活
+	 * @return
+	 */
+	public boolean checkConnection(){
+		Boolean flag=false;
+		try {
+			RedisConnectionFactory redisConnectionFactory = stringRedisTemplate.getConnectionFactory();
+			RedisConnection redisConnection = redisConnectionFactory.getConnection();
+			flag = redisConnection.isClosed();
+		}catch (Exception e){
+			flag=false;
+		}
+
+		if (flag) {
+			log.info("{} Redis Connection is Closed : {}", new Date(), flag);
+		}
+		return !flag;
+	}
+
+	// =============================common============================
 
 	/**
 	 * 指定缓存失效时间
@@ -604,4 +631,6 @@ public class RedisUtil {
 			return 0;
 		}
 	}
+
+
 }

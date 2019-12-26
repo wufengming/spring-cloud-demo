@@ -44,6 +44,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.47</version>
         </dependency>
+        <!--orcale数据库依赖-->
+        <!--<dependency>-->
+            <!--<groupId>com.oracle</groupId>-->
+            <!--<artifactId>ojdbc6</artifactId>-->
+            <!--<version>11.2.0.4</version>-->
+        <!--</dependency>-->
+
         <!-- MybatisPlus -->
         <dependency>
             <groupId>com.baomidou</groupId>

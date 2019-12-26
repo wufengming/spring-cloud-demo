@@ -9,6 +9,10 @@
         <module>service-activ</module>
         <module>service-common</module>
         <module>service-system</module>
+
+        <module>service-zuul</module>
+        <module>service-eureka</module>
+        <module>service-config</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -48,6 +52,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--jdbc-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <!-- Swagger 接口文档 -->
         <dependency>

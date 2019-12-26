@@ -2,6 +2,7 @@ package com.wfm.servicesystem;
 
 import com.wfm.servicesystem.entity.UserEntity;
 import com.wfm.servicesystem.mapper.UserMapper;
+import com.wfm.servicesystem.service.UserService;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,9 @@ public class Test {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     @org.junit.Test
     public void  adduser(){
         UserEntity user=new UserEntity();
@@ -36,6 +40,19 @@ public class Test {
         user.setRecordVer(0);
 
         userMapper.insert(user);
+
+    }
+
+    @org.junit.Test
+    public void  changeBase(){
+
+       UserEntity user= userService.queryUserById(1L);
+
+       System.out.println(user);
+
+       UserEntity user2=userService.findByUserName("admin");
+
+        System.out.println(user2);
 
     }
 }

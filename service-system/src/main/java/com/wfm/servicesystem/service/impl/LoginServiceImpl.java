@@ -200,14 +200,18 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserEntity> implem
         String loginTokenRedisKey = String.format(CommonRedisKey.LOGIN_TOKEN, tokenMd5);
         // 1. tokenMd5:jwtTokenRedisVo
         redisUtil.set(loginTokenRedisKey, jwtTokenRedisVo, expireSecond);
+        redisUtil.expire(loginTokenRedisKey,expireSecond);
         log.info("登录缓存-token：token: {}", jwtTokenRedisVo);
 
         // 2. username:loginSysUserRedisVo
         redisUtil.set(String.format(CommonRedisKey.LOGIN_USER, username), loginUserRedisVo,expireSecond);
+        redisUtil.expire(String.format(CommonRedisKey.LOGIN_USER, username),expireSecond);
         log.info("登录缓存-user：userInfo: {}", loginUserRedisVo);
+
 
         // 3. login user-token(存储jwtToken 的key的信息)
         redisUtil.set(String.format(CommonRedisKey.LOGIN_USER_TOKEN, username, tokenMd5), loginTokenRedisKey);
+        redisUtil.expire(String.format(CommonRedisKey.LOGIN_USER_TOKEN, username, tokenMd5),expireSecond);
     }
 
     @Override
@@ -217,6 +221,16 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserEntity> implem
         }
         LoginUserRedisVo userRedisVo = getLoginUserRedisVo(username);
         return userRedisVo;
+    }
+
+    @Override
+    public void refreshLoginInfo(String oldToken, String username, JwtToken newJwtToken) {
+        // 获取缓存的登陆用户信息
+        LoginUserRedisVo loginUserRedisVo = getLoginUserRedisVo(username);
+        // 删除之前的token信息
+        deleteUserInfoByRedis(oldToken, username);
+        // 缓存登陆信息
+        cacheLoginInfo(newJwtToken, loginUserRedisVo);
     }
 
     @Override

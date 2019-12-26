@@ -118,6 +118,17 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/guest/**","anon");
         filterChainDefinitionMap.put("/login","anon");
 
+        filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/**/*.js", "anon");
+        filterChainDefinitionMap.put("/**/*.css", "anon");
+        filterChainDefinitionMap.put("/**/*.html", "anon");
+        filterChainDefinitionMap.put("/**/*.svg", "anon");
+        filterChainDefinitionMap.put("/**/*.pdf", "anon");
+        filterChainDefinitionMap.put("/**/*.jpg", "anon");
+        filterChainDefinitionMap.put("/**/*.png", "anon");
+        filterChainDefinitionMap.put("/**/*.ico", "anon");
+
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger**/**", "anon");

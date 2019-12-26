@@ -50,6 +50,15 @@ public interface LoginService extends IService<UserEntity> {
      */
     void cacheLoginInfo(JwtToken jwtToken, LoginUserVo loginUserVo);
 
+
+    /**
+     * 刷新登陆信息
+     * @param oldToken
+     * @param username
+     * @param newJwtToken
+     */
+    void refreshLoginInfo(String oldToken, String username, JwtToken newJwtToken);
+
     /**
      * 缓存用户信息
      * @param username

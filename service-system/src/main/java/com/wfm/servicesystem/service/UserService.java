@@ -106,4 +106,11 @@ public interface UserService extends BaseService<UserEntity> {
      * @throws Exception
      */
     boolean updateSysUserHead(InfoBaseModel infoBaseModel, String headPath) throws Exception;
+
+    /**
+     * 测试切换数据库的测试例子
+     * @param id
+     * @return
+     */
+    UserEntity queryUserById(Long id);
 }

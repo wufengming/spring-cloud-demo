@@ -9,6 +9,8 @@ import com.wfm.servicecommon.exception.BusinessException;
 import com.wfm.servicecommon.utils.CommonUtil;
 import com.wfm.servicecommon.utils.PasswordUtil;
 import com.wfm.servicecommon.vo.Paging;
+import com.wfm.servicesystem.config.datasource.EnumDataSourceType;
+import com.wfm.servicesystem.config.datasource.TargetDataSource;
 import com.wfm.servicesystem.model.enums.EnableStateEnum;
 import com.wfm.servicesystem.entity.UserEntity;
 import com.wfm.servicesystem.entity.UserOrgEntity;
@@ -243,5 +245,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                   .setId(sysUser.getId())
                   .setRecordVer(sysUser.getRecordVer());
         return updateById(updateUser);
+    }
+
+    @Override
+    @TargetDataSource(EnumDataSourceType.MYSQL_BACKUP)
+    public UserEntity queryUserById(Long id) {
+        return userMapper.selectById(id);
     }
 }

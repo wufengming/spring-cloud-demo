@@ -248,7 +248,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
     }
 
     @Override
-    @TargetDataSource(EnumDataSourceType.MYSQL_BACKUP)
+    @TargetDataSource(EnumDataSourceType.SLAVE1)
     public UserEntity queryUserById(Long id) {
         return userMapper.selectById(id);
     }

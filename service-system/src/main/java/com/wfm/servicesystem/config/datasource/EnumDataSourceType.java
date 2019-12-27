@@ -1,7 +1,7 @@
 package com.wfm.servicesystem.config.datasource;
 
 /**
- * description: EnumDataSourceType
+ * description: 列出所有数据源
  * date: 2019-12-26 10:01
  *
  * @author: wfm
@@ -9,29 +9,7 @@ package com.wfm.servicesystem.config.datasource;
  */
 public enum  EnumDataSourceType {
 
-    ORACLE,
+    MASTER,
 
-    MYSQL,
-
-    MYSQL_BACKUP;
-
-//    ORACLE("oracle"),
-//
-//    MYSQL("mysql"),
-//
-//    MYSQL_BACKUP("mysql_backup");
-//
-//    private String value;
-//
-//    EnumDataSourceType(String db) {
-//        this.value = db;
-//    }
-//
-//    public String getValue() {
-//        return value;
-//    }
-//
-//    public void setValue(String db) {
-//        this.value = db;
-//    }
+    SLAVE1;
 }

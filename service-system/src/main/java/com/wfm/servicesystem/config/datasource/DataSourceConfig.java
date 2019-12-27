@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * description: DataSourceConfig
+ * description: 多数据源bean的配置类
  * date: 2019-12-26 10:10
  *
  * @author: wfm
@@ -33,37 +33,33 @@ public class DataSourceConfig {
     @Resource
     private MybatisPlusProperties properties;
 
-    @Bean(name = "dataSourceMysql")
+    @Bean(name = "dataSourceMaster")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.druid.mysql")
-    public DataSource mysqlDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.druid.master")
+    public DataSource masterDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Bean(name = "dataSourceMysqlBackup")
-    @ConfigurationProperties(prefix = "spring.datasource.druid.mysql-backup")
-    public DataSource mysqlBackupDataSource() {
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "dataSourceOracle")
-    @ConfigurationProperties(prefix = "spring.datasource.druid.oracle")
-    public DataSource oracleDataSource() {
+    @Bean(name = "dataSourceSlave1")
+    @ConfigurationProperties(prefix = "spring.datasource.druid.slave1")
+    public DataSource slave1DataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 
 
-
+    /**
+     * 设置动态数据源, 来确定主DataSource
+     * @return
+     */
     @Bean(name = "dynamicDataSource")
     public DataSource dynamicDataSource() {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         // 配置默认数据源
-        dynamicDataSource.setDefaultTargetDataSource(mysqlDataSource());
+        dynamicDataSource.setDefaultTargetDataSource(masterDataSource());
         // 配置多数据源
         Map<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(EnumDataSourceType.ORACLE.name(), oracleDataSource());
-        dataSourceMap.put(EnumDataSourceType.MYSQL.name(), mysqlDataSource());
-        dataSourceMap.put(EnumDataSourceType.MYSQL_BACKUP.name(), mysqlBackupDataSource());
+        dataSourceMap.put(EnumDataSourceType.MASTER.name(), masterDataSource());
+        dataSourceMap.put(EnumDataSourceType.SLAVE1.name(), slave1DataSource());
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         return dynamicDataSource;
     }

@@ -41,7 +41,7 @@ spring:
   # 数据源
   datasource:
     druid:
-      mysql:
+      master:
         # tcpRcvBuf/tcpSndBuf 缓冲区参数 rewriteBatchedStatements batchUpdate参数
         # url: jdbc:log4jdbc:mysql://127.0.0.1:3306/mydb?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&tcpRcvBuf=1048576&tcpSndBuf=1048576&socketTimeout=180000&rewriteBatchedStatements=true&autoReconnect=true
         url: jdbc:mysql://127.0.0.1:3306/wfm?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
@@ -62,7 +62,7 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 检测语句
         validation-query: "select 1"
-      mysql-backup:
+      slave1:
         # tcpRcvBuf/tcpSndBuf 缓冲区参数 rewriteBatchedStatements batchUpdate参数
         # url: jdbc:mysql://127.0.0.1:3306/mydb?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&useSSL=false
         url: jdbc:mysql://127.0.0.1:3306/spring_boot_plus?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
@@ -82,13 +82,6 @@ spring:
         time-between-eviction-runs-millis: 30000
         # 检测语句
         validation-query: "select 1"
-      oracle:
-        url: jdbc:oracle:thin:@127.0.0.1:1521/db
-        username: root
-        password: root
-        driver-class-name: oracle.jdbc.driver.OracleDriver
-        max-active: 10
-        max-wait: 10000
   flyway:
     classpath: /db/migration
     enabled: false

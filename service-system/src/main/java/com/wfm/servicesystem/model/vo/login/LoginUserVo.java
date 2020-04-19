@@ -1,10 +1,12 @@
 package com.wfm.servicesystem.model.vo.login;
 
+import com.wfm.servicesystem.model.vo.common.HelpModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,18 +31,21 @@ public class LoginUserVo implements Serializable {
     @ApiModelProperty("用户名称")
     private String userName;
 
-    @ApiModelProperty("组织id")
+    @ApiModelProperty("默认组织id")
     private Long orgId;
 
-    @ApiModelProperty("组织编码")
-    private Long orgCode;
+    @ApiModelProperty("默认组织编码")
+    private String orgCode;
 
-    @ApiModelProperty("组织名称")
+    @ApiModelProperty("默认组织名称")
     private String orgName;
 
-    @ApiModelProperty("角色编码")
-    private Set<String> roles;
+    @ApiModelProperty("角色信息")
+    private List<HelpModel> roleList;
+
+    @ApiModelProperty("组织信息")
+    private List<HelpModel> orgList;
 
     @ApiModelProperty("权限编码列表")
-    private Set<String> permissionCodes;
+    private List<PermissionMenu> permissionList;
 }

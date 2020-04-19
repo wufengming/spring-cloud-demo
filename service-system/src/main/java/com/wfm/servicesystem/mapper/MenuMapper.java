@@ -36,5 +36,7 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
      * @return
      */
      IPage<MenuQueryVo> getMenuPageList(@Param("page") Page page, @Param("param") PageModel queryParam);
+
+
 }
 

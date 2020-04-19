@@ -12,13 +12,17 @@ import com.wfm.servicesystem.common.utils.JwtTokenUtil;
 import com.wfm.servicesystem.common.utils.JwtUtil;
 import com.wfm.servicesystem.common.utils.SaltUtil;
 import com.wfm.servicesystem.config.jwt.JwtToken;
+import com.wfm.servicesystem.entity.OrganizeEntity;
+import com.wfm.servicesystem.entity.RoleEntity;
 import com.wfm.servicesystem.entity.UserEntity;
 import com.wfm.servicesystem.mapper.UserMapper;
 import com.wfm.servicesystem.model.convert.ShiroConvert;
 import com.wfm.servicesystem.model.convert.UserConvert;
 import com.wfm.servicesystem.model.enums.EnableStateEnum;
+import com.wfm.servicesystem.model.vo.common.HelpModel;
 import com.wfm.servicesystem.model.vo.login.LoginUserTokenVo;
 import com.wfm.servicesystem.model.vo.login.LoginUserVo;
+import com.wfm.servicesystem.model.vo.login.PermissionMenu;
 import com.wfm.servicesystem.model.vo.login.SysLoginModel;
 import com.wfm.servicesystem.model.vo.shiro.JwtTokenRedisVo;
 import com.wfm.servicesystem.model.vo.shiro.LoginUserRedisVo;
@@ -36,8 +40,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -92,23 +98,53 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserEntity> implem
             throw new AuthenticationException("用户名或密码错误");
         }
 
-        // 根据用户id获取组织信息
-
-        // 根据用户id获取角色信息
-
-
-        // 获取当前用户权限
-//        Set<String> permissionCodes = sysRolePermissionService.getPermissionCodesByRoleId(roleId);
-//        if (CollectionUtils.isEmpty(permissionCodes)) {
-//            throw new AuthenticationException("权限列表不能为空");
-//        }
-//        loginSysUserVo.setPermissionCodes(permissionCodes);
-
         // 将系统用户对象转换成登陆用户对象
         LoginUserVo loginUserVo =new LoginUserVo();
+
         loginUserVo.setUserId(sysUser.getId())
                 .setUserAccount(sysUser.getAccount())
                 .setUserName(sysUser.getRealname());
+
+
+
+        // 根据用户id获取组织信息
+        List<OrganizeEntity> orgList=userMapper.getOrganizeListByUser(sysUser.getId());
+        List<HelpModel> orgHelp = new ArrayList<>();
+        OrganizeEntity defultOrg = null;
+
+        if(orgList!=null && orgList.size()>0) {
+            orgList.forEach(a -> orgHelp.add(new HelpModel().setId(a.getId()).setCode(a.getEncode()).setName(a.getName())));
+            // 筛选默认组织新，没有的话，选取第一个组织信息
+            List<OrganizeEntity> defultOrgList = orgList.stream().filter(s -> s.getEnabledmark() == 1).collect(Collectors.toList());
+            if (defultOrgList == null || defultOrgList.size() == 0) {
+                defultOrg = orgList.get(0);
+            }
+        }
+
+        loginUserVo.setOrgList(orgHelp);
+
+        // 设置默认组织信息
+        if(defultOrg!=null){
+            loginUserVo.setOrgId(defultOrg.getId())
+                    .setOrgCode(defultOrg.getEncode())
+                    .setOrgName(defultOrg.getName());
+        }
+
+        // 根据用户id获取角色信息
+        List<RoleEntity> roleList=userMapper.getRoleListByUser(sysUser.getId());
+
+        List<HelpModel> roleHelp=new ArrayList<>();
+        roleList.forEach(b -> roleHelp.add(new HelpModel().setId(b.getId()).setCode(b.getEncode()).setName(b.getName())));
+
+        loginUserVo.setRoleList(roleHelp);
+
+
+        // 获取当前用户权限,根据用户所拥有的的权限
+        List<PermissionMenu> permissionList = userMapper.getPermissionByUser(sysUser.getId());
+        if (CollectionUtils.isEmpty(permissionList)) {
+            throw new AuthenticationException("权限列表不能为空");
+        }
+        loginUserVo.setPermissionList(permissionList);
 
 
         // 生成token字符串并返回

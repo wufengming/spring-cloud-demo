@@ -17,7 +17,7 @@ import java.util.UUID;
 public class CommonUtil {
 
     /**
-     * 以UUID重命名
+     * 以UUID重命名（附件）
      *
      * @param fileName
      * @return
@@ -37,24 +37,6 @@ public class CommonUtil {
         //不足六位前面补0
         String str = String.format("%06d", num);
         return str;
-    }
-
-    /**
-     * 批量递归删除时 判断target是否在ids中 避免重复删除
-     * @param target
-     * @param ids
-     * @return
-     */
-    public static Boolean judgeIds(String target, String[] ids){
-
-        Boolean flag = false;
-        for(String id : ids){
-            if(id.equals(target)){
-                flag = true;
-                break;
-            }
-        }
-        return flag;
     }
 
     /**

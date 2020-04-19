@@ -21,10 +21,7 @@
 
     <dependencies>
         <!--公共类的依赖-->
-        <dependency>
-            <groupId>com.wfm</groupId>
-            <artifactId>service-common</artifactId>
-        </dependency>
+
 
         <!--eureka-client 既能注册服务又能订阅服务-->
         <!--<dependency>-->
@@ -141,6 +138,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId> <!--引入依赖 这里特别重要-->
         </dependency>
+        <!--公共类的依赖-->
         <dependency>
             <groupId>com.wfm</groupId>
             <artifactId>service-common</artifactId>

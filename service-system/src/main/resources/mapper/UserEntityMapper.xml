@@ -82,4 +82,49 @@
         where del_flag = 0
     </select>
 
+    <select id="getOrganizeListByUser" resultType="com.wfm.servicesystem.entity.OrganizeEntity">
+        select s_organize.* from s_organize
+        left join s_user_org on s_user_org.orgid=s_organize.id
+        where s_user_org.user_id=#{userid}
+    </select>
+
+    <select id="getRoleListByUser" resultType="com.wfm.servicesystem.entity.RoleEntity">
+        select s_role.* from s_role
+        left join s_user_org on s_user_org.role_id=s_role.id
+        where s_user_org.user_id=#{userid}
+    </select>
+
+    <resultMap id="PermissionResultMap" type="com.wfm.servicesystem.model.vo.login.PermissionMenu">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId"/>
+        <result column="levels" property="levels"/>
+        <result column="encode" property="encode"/>
+        <result column="name" property="name"/>
+        <result column="path" property="path"/>
+        <result column="types" property="types"/>
+
+        <collection property="actions" ofType="com.wfm.servicesystem.model.vo.login.PermissionMenuButton">
+            <id column="button_id" property="id" />
+            <result column="button_parent_id" property="parentId"/>
+            <result column="button_levels" property="levels"/>
+            <result column="button_encode" property="encode"/>
+            <result column="button_name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getPermissionByUser" resultMap="PermissionResultMap">
+        select
+        s_menu.id,s_menu.parent_id,s_menu.levels,s_menu.encode,s_menu.name,s_menu.path,s_menu.types,
+        s_menu_button.id button_id,s_menu_button.parent_id button_parent_id,s_menu_button.levels button_levels,s_menu_button.encode button_encode,s_menu_button.name button_name
+        from s_menu
+        left join (select * from s_role_authorize where s_role_authorize.objecttype = 1 and type=1) s_role_authorize  on s_role_authorize.menu_id=s_menu.id
+        left join s_user_org on s_user_org.role_id=s_role_authorize.object_id
+
+        left join s_menu_button on s_menu_button.menu_id=s_menu.id
+        left join (select * from s_role_authorize where s_role_authorize.objecttype = 1 and type=2) s_role_authorize2  on s_role_authorize2.menu_id=s_menu_button.id
+        left join s_user_org s_user_org2 on s_user_org2.role_id=s_role_authorize2.object_id
+
+        where  s_user_org.user_id=#{userid} and s_user_org2.user_id=#{userid}
+    </select>
+
 </mapper>

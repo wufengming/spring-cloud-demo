@@ -136,7 +136,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleEntity> imp
     public boolean deleteSysRole(Long id) throws Exception {
 
         // 判断该角色下是否有可用用户，如果有，则不能删除
-        boolean isExistsUser = userOrgMapper.selectCount(new LambdaQueryWrapper<UserOrgEntity>().eq(UserOrgEntity::getRolePhid,id))>0;
+        boolean isExistsUser = userOrgMapper.selectCount(new LambdaQueryWrapper<UserOrgEntity>().eq(UserOrgEntity::getRoleid,id))>0;
         if (isExistsUser) {
             throw new DaoException("该角色下还存在可用用户，不能删除");
         }

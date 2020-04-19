@@ -25,4 +25,7 @@
         <include refid="Base_Column_List"/>
         from s_menu
     </select>
+
+
+
 </mapper>

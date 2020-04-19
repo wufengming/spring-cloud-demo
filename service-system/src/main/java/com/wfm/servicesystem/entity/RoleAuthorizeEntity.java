@@ -27,7 +27,7 @@ public class RoleAuthorizeEntity extends BaseEntity {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "模块主键 (菜单，按钮，表单)")
+    @ApiModelProperty(value = "模块主键 (1-菜单，2-按钮，3-表单)")
     private Long menuId;
 
     @ApiModelProperty(value = "模块类型1-菜单 2-按钮 3-表单")
@@ -36,7 +36,7 @@ public class RoleAuthorizeEntity extends BaseEntity {
     @ApiModelProperty(value = "对象分类1-角色 2-部门")
     private Integer objecttype;
 
-    @ApiModelProperty(value = "对象主键")
+    @ApiModelProperty(value = "对象主键(角色主键/部门主键)")
     private Long objectId;
 
     @ApiModelProperty(value = "排序码")

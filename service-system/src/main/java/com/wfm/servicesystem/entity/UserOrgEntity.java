@@ -40,12 +40,12 @@ public class UserOrgEntity extends BaseEntity {
     private String orgcode;
 
     @ApiModelProperty(value = "角色主键")
-    private Long rolePhid;
+    private Long roleid;
 
     @ApiModelProperty(value = "角色编码")
     private String roleCode;
 
-    @ApiModelProperty(value = "有效标志")
+    @ApiModelProperty(value = "是否默认组织")
     private Integer enabledmark;
 
     @ApiModelProperty(value = "删除标志 默认0")

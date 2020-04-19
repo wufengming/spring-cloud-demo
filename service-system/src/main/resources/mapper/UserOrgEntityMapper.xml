@@ -11,7 +11,7 @@
         insert_dt,
         update_dt,
         record_ver,
-        user_id, user_account, orgid, orgcode, enabledmark, role_phid, role_code, del_flag, description
+        user_id, user_account, orgid, orgcode, role_id, role_code, enabledmark,  del_flag, description
     </sql>
 
 </mapper>

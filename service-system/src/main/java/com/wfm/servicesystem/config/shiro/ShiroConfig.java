@@ -43,7 +43,6 @@ import javax.servlet.Filter;
  */
 @Slf4j
 @Configuration
-
 public class ShiroConfig {
 
     /**

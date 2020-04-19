@@ -1,0 +1,29 @@
+带账套和年度的第三方系统单点登录至G6的url规则(用户编码保持一致)：
+
+    String user_name 用户编号
+    String verify=MD5.crypt(user_name + "newgrand");//用md5加密校验串    
+    String accountNo 账套号（必输）
+    String accountName 账套名称（必输）
+    String year 年度（必输）
+    String keyInfo 加密锁信息（可选）
+    String url="http://10.0.20.111:7777/G6-Build/authentication.SSO.d?handler=defaultGsoftSSOActionHandlerBean&verify="+verify+"&userName="+user_name+"&accountNo="+accountNo+"&accountName="+accountName+"&year="+year+"&keyInfo="+keyInfo;//获取单点登录地址
+
+    通过url即可实现登录
+
+如：
+http://10.0.16.187:6666/G6-Build/authentication.SSO.d?handler=defaultGsoftSSOActionHandlerBean&verify=bffe926b30fafe357b7ef2943fcc88b8
+&userName=01&accountNo=01&accountName=北京工会&year=2015
+
+注：http://10.0.16.187:6666/G6-Build为举例说明，根据实际部署的url登陆地址来
+
+
+通用单点登录(不带账套年度的第三方系统单点登陆如suv的url规则)
+
+
+    String user_name 用户编号
+    String verify=MD5.crypt(user_name + "newgrand");//用md5加密校验串
+    String url="http://10.35.57.42:6666/dzjc/authentication.SSO.d?handler=defaultSSOActionHandlerBean&verify="+verify+"&userName="+user_name;//获取单点登录地址
+
+    通过url即可实现登录
+
+注：http://10.35.57.42:6666/dzjc为举例说明，根据实际部署的url登陆地址来
